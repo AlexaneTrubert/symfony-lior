@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}- Accueil{% endblock %}
+
+{% block body %}
+    <h1>Nos produits phares</h1>
+    <div class="row">
+        {% for product in products %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{ product.picture }}" alt="Image du produit" class="img-fluid">
+
+                    <div class="card-body">
+                        <h4 class="card-title">{{ product.name }} ({{ product.price / 100 }}&euro;)</h4>
+                        <span class="badge text-bg-info">{{ product.category }}</span>
+                        <p class="card-text">
+                            {{ product.shortDescription }}
+                        </p>
+                        <a href="#" class="btn btn-primary btn-sm">Détail</a>
+                        <a href="#" class="btn btn-success btn-sm">Ajouter</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h2>Un service irreprochable</h2>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab commodi inventore itaque, laboriosam nam
+        sapiente?
+    </p>
+
+    <div class="row">
+        {% include 'shared/_assurance.html.twig' with {
+            'color': 'primary',
+            'icone': 'fas fa-truck',
+            'texte': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium adipisci blanditiis ex repudiandae voluptas voluptatem?'
+        } %}
+
+        {% include 'shared/_assurance.html.twig' with {
+            'color': 'success',
+            'icone': 'fas fa-check',
+            'texte': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium adipisci blanditiis ex repudiandae voluptas voluptatem?'
+        } %}
+
+        {% include 'shared/_assurance.html.twig' with {
+            'color': 'warning',
+            'icone': 'fas fa-lock',
+            'texte': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium adipisci blanditiis ex repudiandae voluptas voluptatem?'
+        } %}
+    </div>
+{% endblock %}
