@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Constraint\GreaterThan;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
@@ -66,13 +70,13 @@ class ProductController extends AbstractController
 
 
         return $this->render('product/create.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
     #[Route('/admin/product/{id}/edit', name: 'product_edit', methods: ['GET', 'POST'])]
-    public function edit($id, ProductRepository $productRepository,
-                         Request $request, UrlGeneratorInterface $urlGenerator
+    public function edit(Product $id, ProductRepository $productRepository,
+                         Request $request, ValidatorInterface $validator
     )
     {
         $product = $productRepository->find($id);
@@ -80,8 +84,7 @@ class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $productRepository->save($product, true);
 
             return $this->redirectToRoute('product_show', [
@@ -92,7 +95,7 @@ class ProductController extends AbstractController
 
         return $this->render('product/edit.html.twig', [
             'product' => $product,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 }

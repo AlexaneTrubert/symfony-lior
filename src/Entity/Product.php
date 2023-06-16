@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -15,9 +16,17 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le nom doit faire au moins {{ value }} caractères',
+        maxMessage: 'Le nom ne doit pas faire plus de {{ value }} caractères')
+    ]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le prix est obligatoire')]
     private ?int $price = null;
 
     #[ORM\Column(length: 255)]
@@ -27,9 +36,16 @@ class Product
     private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Url(message: 'L\'url de l\'image n\'est pas valide')]
+    #[Assert\NotBlank(message: 'L\'url de l\'image est obligatoire')]
     private ?string $picture = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'La description courte est obligatoire')]
+    #[Assert\Length(
+        min: 20,
+        minMessage: 'La description courte doit faire au moins {{ value }} caractères')
+    ]
     private ?string $shortDescription = null;
 
     public function getId(): ?int

@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Editer le produit {{ product.name }}</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'no-validate': 'novalidate'}}) }}
 
     {{ form_errors(form) }}
 
