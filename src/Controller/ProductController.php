@@ -6,21 +6,16 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use PHPUnit\Framework\Constraint\GreaterThan;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\LessThanOrEqual;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
-    #[Route('/{slug}', name: 'product_category', methods: ['GET'])]
+    #[Route('/{slug}', name: 'product_category', methods: ['GET'], priority: -1)]
     public function category($slug, CategoryRepository $categoryRepository): Response
     {
         $category = $categoryRepository->findOneBy(['slug' => $slug]);
