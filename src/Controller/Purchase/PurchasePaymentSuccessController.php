@@ -4,8 +4,10 @@ namespace App\Controller\Purchase;
 
 use App\Cart\CartService;
 use App\Entity\Purchase;
+use App\Event\PurchaseSuccessEvent;
 use App\Repository\PurchaseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -14,7 +16,7 @@ class PurchasePaymentSuccessController extends AbstractController
 {
     #[Route('/purchase/terminate/{{id}}', name: 'purchase_payment_success')]
     #[IsGranted('ROLE_USER', message: 'Vous devez être connecté pour confirmer une commande')]
-    public function success($id, PurchaseRepository $purchaseRepository, CartService $cartService): RedirectResponse
+    public function success($id, PurchaseRepository $purchaseRepository, CartService $cartService, EventDispatcherInterface $dispatcher): RedirectResponse
     {
         $purchase = $purchaseRepository->find($id);
 
@@ -30,6 +32,8 @@ class PurchasePaymentSuccessController extends AbstractController
         $purchaseRepository->save($purchase, true);
 
         $cartService->empty();
+
+        $dispatcher->dispatch(new PurchaseSuccessEvent($purchase), 'purchase.success');
 
         $this->addFlash('success', 'La commande a été payée et confirmée');
         return $this->redirectToRoute('purchases_index');
