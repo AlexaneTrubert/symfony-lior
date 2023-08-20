@@ -20,7 +20,7 @@
             <tr>
                 <td>{{ p.id }}</td>
                 <td>{{ p.address }}<br>{{ p.postalCode }}, {{ p.city | upper }}</td>
-                <td>{{ p.purchasedAt | date('d/m/Y') }}</td>
+                <td>{{ p.purchasedAt | date('d/m/Y H:m') }}</td>
                 <td>
                     <ul>
                         {% for item in p.purchaseItems %}
