@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PurchaseRepository::class)]
+#[Orm\HasLifecycleCallbacks]
 class Purchase
 {
     public const STATUS_PENDING = 'PENDING';
@@ -48,6 +49,25 @@ class Purchase
     public function __construct()
     {
         $this->purchaseItems = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        if (empty($this->purchasedAt)) {
+            $this->purchasedAt = new \DateTimeImmutable();
+        }
+    }
+
+    #[ORM\PreFlush]
+    public function preFlush()
+    {
+        $total = 0;
+        foreach ($this->purchaseItems as $item)
+        {
+            $total += $item->getTotal();
+        }
+        $this->total = $total;
     }
 
     public function getId(): ?int
