@@ -10,24 +10,27 @@ class CartService
 {
     protected SessionInterface $session;
     protected ProductRepository $productRepository;
+    private RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack, ProductRepository $productRepository)
     {
-        $this->session = $requestStack->getSession();
+        $this->requestStack = $requestStack;
         $this->productRepository = $productRepository;
     }
 
     protected function getCart(): array
     {
-        return $this->session->get('cart', []);
+        $session = $this->requestStack->getSession();
+        return $session->get('cart', []);
     }
 
-    protected function saveCart(array $cart)
+    protected function saveCart(array $cart): void
     {
-        $this->session->set('cart', $cart);
+        $session = $this->requestStack->getSession();
+        $session->set('cart', $cart);
     }
 
-    public function add(int $id)
+    public function add(int $id): void
     {
         // 1 - Récupérer le panier de l'utilisateur
         // 2 - Si le panier n'existe pas, le créer avec un tableau vide
@@ -110,7 +113,7 @@ class CartService
 
     }
 
-    public function empty()
+    public function empty(): void
     {
         $this->saveCart([]);
     }
