@@ -4,17 +4,13 @@ namespace App\Controller\Purchase;
 
 use App\Cart\CartService;
 use App\Entity\Purchase;
-use App\Entity\PurchaseItem;
 use App\Form\CartConfirmationType;
 use App\Purchase\PurchasePersister;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PurchaseConfirmationController extends AbstractController
