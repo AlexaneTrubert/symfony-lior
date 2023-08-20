@@ -7,6 +7,7 @@ use App\Form\ProductType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,8 +31,8 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/{category_slug}/{slug}', name: 'product_show', methods: ['GET'])]
-    public function show($slug, ProductRepository $productRepository)
+    #[Route('/{category_slug}/{slug}', name: 'product_show', methods: ['GET'], priority: -1)]
+    public function show($slug, ProductRepository $productRepository): Response
     {
         $product = $productRepository->findOneBy([
             'slug' => $slug
@@ -47,7 +48,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/admin/product/create', name: 'product_create', methods: ['GET', 'POST'])]
-    public function create(Request $request, SluggerInterface $slugger, ProductRepository $productRepository)
+    public function create(Request $request, SluggerInterface $slugger, ProductRepository $productRepository): RedirectResponse|Response
     {
         $form = $this->createForm(ProductType::class);
         $form->handleRequest($request);
@@ -72,7 +73,7 @@ class ProductController extends AbstractController
     #[Route('/admin/product/{id}/edit', name: 'product_edit', methods: ['GET', 'POST'])]
     public function edit(Product $id, ProductRepository $productRepository,
                          Request $request, ValidatorInterface $validator
-    )
+    ): RedirectResponse|Response
     {
         $product = $productRepository->find($id);
 
