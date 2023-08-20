@@ -7,6 +7,7 @@ use App\Repository\PurchaseRepository;
 use App\Stripe\StripeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PurchasePaymentController extends AbstractController
 {
